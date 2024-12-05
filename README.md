@@ -1,7 +1,16 @@
-# WXT + Svelte
+# News Perspective - Browser Extension
 
-This template should help get you started developing with Svelte in WXT.
+A browser extension part of the project "News Perspective."
 
-## Recommended IDE Setup
+## How to build it
+Run the following command on terminal.
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+```bash
+npm i
+# For chrome build
+npm run zip
+# For firefox build
+npm run zip:firefox
+```
+
+The file will be in `/.output` folder if the build is successful.
