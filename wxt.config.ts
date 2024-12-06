@@ -5,6 +5,11 @@ export default defineConfig({
   srcDir: 'src',
   extensionApi: 'chrome',
   modules: ['@wxt-dev/module-svelte'],
+  vite: () => ({
+    define: {
+      APP_VERSION: JSON.stringify(process.env.npm_package_version)
+    }
+  }),
 
   manifest: {
     name: 'News Perspective',
