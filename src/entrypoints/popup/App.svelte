@@ -2,6 +2,7 @@
   import type { Article } from '@/lib/types';
 
   const pathToAnalyze = browser.runtime.getURL('/analyze.html');
+  const pathToAbout = browser.runtime.getURL('/about.html');
 
   let currentPageData = $state<Article | false | null>(null);
   let customArticle = $state<Article>({ title: '', content: '' })
@@ -39,6 +40,10 @@
     }
   };
 
+  const openAboutPage = () => {
+    browser.tabs.create({ url: pathToAbout });
+  };
+
   onMount(async () => {
     const currentTab = await browser.tabs.query({ active: true, currentWindow: true });
     const tid = currentTab.length == 0 ? undefined : currentTab[0].id;
@@ -62,31 +67,64 @@
 
 </script>
 
-<main class="min-h-screen flex flex-col gap-1 items-center p-4 {currentPageData === false ? 'min-w-96' : 'min-w-48'}">
-  <h1>News Analyze</h1>
+<style>
+.bg-gradient {
+  background: #D3CCE3;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #E9E4F0, #D3CCE3);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #E9E4F0, #D3CCE3); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
-  {#if currentPageData === null}
-  <div>
-    Reading current page
+}
+</style>
+
+<main class="min-h-screen flex flex-col gap-1 items-center p-1 min-w-96 select-none bg-gradient">
+  <div class="relative h-full w-full bg-white rounded-lg flex flex-col items-stretch pb-4">
+    <span class="absolute left-0 bottom-0 p-1 text-xs text-gray-400 select-text">{APP_VERSION}</span>
+    <button class="absolute right-0 bottom-0 p-1 text-xs text-gray-400" onclick={openAboutPage}>About</button>
+    <h1 class="w-full text-center text-xl font-semibold tracking-wide mt-4 mb-2">News Perspective</h1>
+  
+    {#if currentPageData === null}
+    <div class="w-full text-center mt-8">
+      Reading current page
+    </div>
+    {:else if currentPageData === false}
+    <div class="flex flex-col items-center mb-3">
+      <p class="text-lg bg-red-100 p-1 rounded-lg">No article detected!</p>
+      <p>You can upload your own news article instead.</p>
+    </div>
+    <table class="w-80">
+      <tbody class="w-full">
+        <tr class="">
+          <th class="text-right font-normal">Title</th>
+          <td class="pl-2"><input type="text" class="border rounded border-slate-600 p-1 w-full" bind:value={customArticle.title} /></td>
+        </tr>
+        <tr>
+          <th class="text-right font-normal">Content</th>
+          <td class="pl-2"><textarea class="border rounded border-slate-600 resize-none w-full h-32 p-1" bind:value={customArticle.content}></textarea></td>
+        </tr>
+      </tbody>
+    </table>
+    <button class="border rounded-2xl bg-teal-500 hover:bg-teal-600 p-2 m-2 w-36 mx-auto text-white text-lg font-medium tracking-wide" onclick={openAnalyzeWithMsg}
+      >Analyze</button
+    >
+    {:else}
+    <div class="flex flex-col items-center mb-2">
+      <p class="text-lg bg-green-100 p-1 rounded-lg">Article detected!</p>
+    </div>
+    <table class="w-80">
+      <tbody class="w-full">
+        <tr class="">
+          <th class="text-right font-normal">Title</th>
+          <td class="pl-2"><input type="text" class="border rounded border-slate-300 p-1 w-full" readonly bind:value={currentPageData.title} /></td>
+        </tr>
+        <tr>
+          <th class="text-right font-normal">Content</th>
+          <td class="pl-2"><textarea class="border rounded border-slate-300 resize-none w-full h-32 p-1" readonly bind:value={currentPageData.content}></textarea></td>
+        </tr>
+      </tbody>
+    </table>
+    <button class="border border-black rounded-full p-2 m-2 w-48 mx-auto" onclick={openAnalyzeWithMsg}
+      >Analyze!</button
+    >
+    {/if}
   </div>
-  {:else if currentPageData === false}
-  <div>
-    No article detected.
-  </div>
-  <label>
-    Title:
-    <input type="text" class="border rounded border-slate-600 p-1" bind:value={customArticle.title} />
-  </label>
-  <label>
-    Content:
-    <textarea class="border rounded border-slate-600 resize-none w-60 h-32 p-1" bind:value={customArticle.content}></textarea>
-  </label>
-  <button class="border border-black p-2 m-2" onclick={openAnalyzeWithMsg}
-    >Go to Analyze</button
-  >
-  {:else}
-  <button class="border border-black p-2 m-2" onclick={openAnalyzeWithMsg}
-    >Go to Analyze</button
-  >
-  {/if}
 </main>

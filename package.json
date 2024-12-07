@@ -15,17 +15,22 @@
     "postinstall": "wxt prepare"
   },
   "devDependencies": {
+    "@iconify/svelte": "^4.1.0",
     "@tsconfig/svelte": "^5.0.4",
     "@types/chrome": "^0.0.280",
-    "@wxt-dev/module-svelte": "^2.0.0",
+    "@wxt-dev/module-svelte": "^2.0.1",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",
-    "svelte": "^5.1.16",
-    "svelte-check": "^4.0.7",
+    "svelte": "^5.8.1",
+    "svelte-check": "^4.1.1",
     "tailwindcss": "^3.4.16",
     "tslib": "^2.8.1",
-    "typescript": "^5.6.3",
-    "wxt": "^0.19.13"
+    "typescript": "^5.7.2",
+    "wxt": "^0.19.19"
   },
-  "packageManager": "pnpm@9.14.4+sha512.c8180b3fbe4e4bca02c94234717896b5529740a6cbadf19fa78254270403ea2f27d4e1d46a08a0f56c89b63dc8ebfd3ee53326da720273794e6200fcf0d184ab"
+  "packageManager": "pnpm@9.14.4+sha512.c8180b3fbe4e4bca02c94234717896b5529740a6cbadf19fa78254270403ea2f27d4e1d46a08a0f56c89b63dc8ebfd3ee53326da720273794e6200fcf0d184ab",
+  "dependencies": {
+    "svelte-headlessui": "^0.0.45",
+    "svelte-transition": "^0.0.17"
+  }
 }

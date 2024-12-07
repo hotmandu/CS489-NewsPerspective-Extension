@@ -50,7 +50,7 @@ const extractArticle: (url: string) => Article | null = (url: string) => {
 
   for(const ext of extractors) {
     const extResult = ext(urlo);
-    if(extResult !== null) {
+    if(extResult !== null && extResult.content.length !== 0) {
       return extResult;
     }
   }

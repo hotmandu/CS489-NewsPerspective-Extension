@@ -5,6 +5,14 @@ export default defineConfig({
   srcDir: 'src',
   extensionApi: 'chrome',
   modules: ['@wxt-dev/module-svelte'],
+  vite: ({ mode }) => ({
+    define: {
+      APP_VERSION: JSON.stringify(process.env.npm_package_version),
+    },
+    resolve: {
+      conditions: ['browser', mode]
+    }
+  }),
 
   manifest: {
     name: 'News Perspective',
