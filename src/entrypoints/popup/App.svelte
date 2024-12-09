@@ -1,5 +1,8 @@
 <script lang="ts">
+  import { getConsolelog } from '@/lib/config';
   import type { Article } from '@/lib/types';
+
+  const clog = getConsolelog('Popup');
 
   const pathToAnalyze = browser.runtime.getURL('/analyze.html');
   const pathToAbout = browser.runtime.getURL('/about.html');
@@ -32,11 +35,17 @@
   }
 
   const openAnalyzeWithMsg = async () => {
+    clog(`Opening new Tab`);
     const tab = await browser.tabs.create({ url: pathToAnalyze });
     if(tab.id) {
+      clog(`Waiting for the tab to complete loading`);
       await waitForTabLoadingToComplete(tab.id);
-      const dataToSent = currentPageData ? currentPageData : customArticle;
-      const _ = await chrome.tabs.sendMessage(tab.id, dataToSent);
+      const dataToSent = currentPageData ? $state.snapshot(currentPageData) : $state.snapshot(customArticle);
+      clog(`Preparing data: `, dataToSent);
+      const _ = browser.tabs.sendMessage(tab.id, dataToSent);
+      clog(`Data Sent`);
+    } else {
+      clog(`Error: Unable to get tab ID`);
     }
   };
 
@@ -45,15 +54,17 @@
   };
 
   onMount(async () => {
+    clog(`Query current tab...`)
     const currentTab = await browser.tabs.query({ active: true, currentWindow: true });
     const tid = currentTab.length == 0 ? undefined : currentTab[0].id;
     if(tid === undefined) {
+      clog(`Tab detection failed`);
       currentPageData = false;
     } else {
       try{
-        const articleData = await chrome.tabs.sendMessage(tid, { cmd: 'get_article', url: currentTab[0].url });
-        console.log(`Got article data`)
-        console.log(articleData)
+        clog(`Found tab ID. Reading article...`);
+        const articleData = await browser.tabs.sendMessage(tid, { cmd: 'get_article', url: currentTab[0].url });
+        clog(`Got article data:`, articleData);
         if(articleData?.content === undefined) {
           currentPageData = false;
         } else {
