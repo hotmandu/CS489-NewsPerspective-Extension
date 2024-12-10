@@ -36,7 +36,7 @@
 
   const openAnalyzeWithMsg = async () => {
     clog(`Opening new Tab`);
-    const tab = await browser.tabs.create({ url: pathToAnalyze });
+    const tab = await browser.tabs.create({ url: pathToAnalyze, active: false });
     if(tab.id) {
       clog(`Waiting for the tab to complete loading`);
       await waitForTabLoadingToComplete(tab.id);
@@ -133,8 +133,8 @@
         </tr>
       </tbody>
     </table>
-    <button class="border border-black rounded-full p-2 m-2 w-48 mx-auto" onclick={openAnalyzeWithMsg}
-      >Analyze!</button
+    <button class="border rounded-2xl bg-teal-500 hover:bg-teal-600 p-2 m-2 w-36 mx-auto text-white text-lg font-medium tracking-wide" onclick={openAnalyzeWithMsg}
+      >Analyze</button
     >
     {/if}
   </div>
