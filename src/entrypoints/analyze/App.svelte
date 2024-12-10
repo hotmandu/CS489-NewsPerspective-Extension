@@ -425,7 +425,7 @@
           <div
             class="panel w-full {false ? 'max-w-72 h-48' : 'h-32'} overflow-hidden"
           >
-          <a class="w-full h-full flex flex-col items-stretch justify-start gap-2 select-text p-2" href={atcl.url}>
+          <a class="w-full h-full flex flex-col items-stretch justify-start gap-2 select-text p-2" href={atcl.url} target="_blank">
             <div class="relative h-full w-full flex flex-row justify-start items-stretch">
               {#if atcl.urlToImage}
               <div class="h-full aspect-square flex-shrink-0 flex items-center justify-center overflow-hidden rounded-md">
