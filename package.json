@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "@iconify/svelte": "^4.1.0",
+    "@tailwindcss/typography": "^0.5.15",
     "@tsconfig/svelte": "^5.0.4",
     "@types/chrome": "^0.0.280",
     "@wxt-dev/module-svelte": "^2.0.1",
@@ -30,6 +31,7 @@
   },
   "packageManager": "pnpm@9.14.4+sha512.c8180b3fbe4e4bca02c94234717896b5529740a6cbadf19fa78254270403ea2f27d4e1d46a08a0f56c89b63dc8ebfd3ee53326da720273794e6200fcf0d184ab",
   "dependencies": {
+    "svelte-exmarkdown": "^4.0.2",
     "svelte-headlessui": "^0.0.45",
     "svelte-transition": "^0.0.17"
   }

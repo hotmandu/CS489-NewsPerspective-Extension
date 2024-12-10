@@ -6,6 +6,7 @@ export interface Article {
 
 // This is taken from the backend code.
 export interface ApiAnalyzeResult {
+  GPT_Compare: string, //GPTs summary of the difference between the current article and related articles
   status: 'success' | 'error';
   analysis: {
     bias_indicators: {

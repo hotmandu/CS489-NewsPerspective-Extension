@@ -6,6 +6,7 @@
   import Section from "./Section.svelte";
   import type { Snippet } from "svelte";
   import { CACHED_API_RESULT, CACHED_ARTICLE, getConsolelog, NO_API_MODE, SHOW_RAW_API_RESULT } from "@/lib/config";
+  import Markdown from "svelte-exmarkdown";
 
   const clog = getConsolelog('Analyze');
 
@@ -411,6 +412,14 @@
       </Section>
       {#if fetchResult.related_articles.length > 0}
       <Section title="Related Articles">
+        <div
+          class="panel p-4 w-full flex flex-col items-center justify-center gap-2 select-none"
+        >
+          <p class="text-xl">Comparison Summary</p>
+          <div class="w-full py-4 px-8 prose prose-base max-w-none">
+            <Markdown md={fetchResult.GPT_Compare} />
+          </div>
+        </div>
         <div class="w-full mx-auto mt-4 flex flex-row flex-wrap justify-center items-center gap-4">
           {#each fetchResult.related_articles as atcl, _ (atcl.url)}
           <div
