@@ -4,8 +4,10 @@ A browser extension part of the project "News Perspective."
 
 ## How to build it
 
-# simple way: 
+# simple way:
+```bash
 pnpm dev
+```
 
 # Another way: Run the following command on terminal.
 
