@@ -3,7 +3,13 @@
 A browser extension part of the project "News Perspective."
 
 ## How to build it
-Run the following command on terminal.
+
+# simple way:
+```bash
+pnpm dev
+```
+
+# Another way: Run the following command on terminal.
 
 ```bash
 npm i
