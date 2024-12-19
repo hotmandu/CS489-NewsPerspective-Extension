@@ -64,6 +64,8 @@
         clog(`Found tab ID. Sendind command...`);
         browser.tabs.sendMessage(tid, { cmd: 'open_overlay', url: currentTab[0].url });
       } catch (e) {
+      } finally {
+        window.close();
       }
     }
   };

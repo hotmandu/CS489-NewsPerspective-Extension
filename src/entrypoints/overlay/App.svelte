@@ -384,10 +384,18 @@
   }
 </script>
 
-<div class="fixed z-[9999] top-0 bottom-0 left-0 right-0 p-10 flex items-center justify-center bg-slate-300 bg-opacity-15 backdrop-blur-xl {loadingState === false ? 'hidden' : ''}">
-  {#if loadingState === true}
-  Loading
-  {:else}
-  Error: {loadingState}
-  {/if}
+{#if loadingState !== true && loadingState !== false}
+<div class="fixed z-[9999] top-0 right-0 p-6 flex items-center justify-center">
+  <div class="flex flex-col gap-2 bg-slate-200 p-4 rounded-md">
+    <div>Error!</div>
+    <div>{loadingState}</div>
+  </div>
 </div>
+{/if}
+{#if loadingState === true}
+<div class="fixed z-[9999] top-0 right-0 p-6 flex items-center justify-center">
+  <div class="flex flex-row gap-2 bg-slate-200 p-4 rounded-md">
+    <Icon icon="line-md:loading-loop" width="24" height="24" /> Loading
+  </div>
+</div>
+{/if}
