@@ -1,5 +1,9 @@
+import { ContentScriptContext } from 'wxt/client';
+import './overlay/app.css';
+import App from './overlay/App.svelte';
 import { getConsolelog } from "@/lib/config";
 import type { Article } from "@/lib/types";
+import { mount, unmount } from 'svelte';
 
 type Extractor = (url: URL) => Article | null;
 
@@ -65,11 +69,36 @@ const extractArticle: (url: string) => Article | null = (url: string) => {
   return null;
 };
 
+const openOverlay = async (ctx: ContentScriptContext, atcl: Article) => {
+  const ui = await createShadowRootUi(ctx, {
+    name: 'news-perspective',
+    position: 'inline',
+    anchor: 'body',
+    onMount: (container) => {
+      // Create the Svelte app inside the UI container
+      const app = mount(App, {
+        target: container,
+        props: {articleMsg: atcl}
+      });
+      return app;
+    },
+    onRemove: (app) => {
+      // Destroy the app when the UI is removed
+      if (app) unmount(app);
+    },
+  });
+
+  // 4. Mount the UI
+  ui.mount();
+};
+
 export default defineContentScript({
   matches: ["*://*/*"],
+  cssInjectionMode: 'ui',
   main(ctx) {
     clog(`Content Script Run`);
     browser.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+      clog(`Got Message`, msg);
       if (msg?.cmd === "get_article") {
         const url: string | undefined = msg.url;
         clog(`Got URL: ${url}`);
@@ -85,6 +114,22 @@ export default defineContentScript({
           sendResponse({ error: "error" });
         }
         clog(`Sent Response`);
+        return;
+      } else if (msg?.cmd === "open_overlay") {
+        const url: string | undefined = msg.url;
+        clog(`Got URL: ${url}`);
+        if (url) {
+          const result = extractArticle(url);
+          clog(`Extraction Result:`, result);
+          if (result === null) {
+            sendResponse({ error: "error" });
+          } else {
+            openOverlay(ctx, result);
+          }
+        } else {
+          sendResponse({ error: "error" });
+        }
+        sendResponse({ ok: "ok" });
         return;
       }
       clog(`Invalid Command: ${msg?.cmd}`);

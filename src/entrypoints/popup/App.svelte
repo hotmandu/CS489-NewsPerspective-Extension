@@ -53,6 +53,21 @@
     browser.tabs.create({ url: pathToAbout });
   };
 
+  const openOverlay = async () => {
+    clog(`Query current tab...`)
+    const currentTab = await browser.tabs.query({ active: true, currentWindow: true });
+    const tid = currentTab.length == 0 ? undefined : currentTab[0].id;
+    if(tid === undefined) {
+      clog(`Open overlay failed`);
+    } else {
+      try{
+        clog(`Found tab ID. Sendind command...`);
+        browser.tabs.sendMessage(tid, { cmd: 'open_overlay', url: currentTab[0].url });
+      } catch (e) {
+      }
+    }
+  };
+
   onMount(async () => {
     clog(`Query current tab...`)
     const currentTab = await browser.tabs.query({ active: true, currentWindow: true });
@@ -137,5 +152,8 @@
       >Analyze</button
     >
     {/if}
+    <button class="border rounded-2xl bg-teal-500 hover:bg-teal-600 p-2 m-2 w-36 mx-auto text-white text-lg font-medium tracking-wide" onclick={openOverlay}
+      >Open Overlay</button
+    >
   </div>
 </main>
