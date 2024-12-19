@@ -44,14 +44,33 @@ const extractFromCNN: Extractor = (url) => {
   }
 
   // Extract
+  const article = document.querySelector<HTMLDivElement>("div.article__content");
+  const title = document.querySelector<HTMLHeadingElement>("h1.headline__text");
+  if (article === null) {
+    return null;
+  }
 
-  return {
-    title: "CNN",
-    content: "Hell yeah",
-  };
+  const result: Article = { title: "", content: "" };
+  result.title = title?.innerText ?? "";
+
+  const texts = article.innerText;
+
+  result.content = texts.replaceAll("\r", "\n").replaceAll("\n\n", "\n").trim();
+
+  return result;
 };
 
-const extractors: Extractor[] = [extractFromBBC];
+const extractFromEverywhere: Extractor = (url) => {
+  const result: Article = { title: "", content: "" };
+  result.title = "Extracted from HTML";
+
+  const texts = document.body.innerText;
+
+  result.content = texts.replaceAll("\r", "\n").replaceAll("\n\n", "\n").trim();
+  return result;
+};
+
+const extractors: Extractor[] = [extractFromBBC, extractFromCNN, extractFromEverywhere];
 
 const extractArticle: (url: string) => Article | null = (url: string) => {
   const urlo = URL.parse(url);
@@ -69,7 +88,7 @@ const extractArticle: (url: string) => Article | null = (url: string) => {
   return null;
 };
 
-const openOverlay = async (ctx: ContentScriptContext, atcl: Article) => {
+const openOverlay = async (ctx: ContentScriptContext) => {
   const ui = await createShadowRootUi(ctx, {
     name: 'news-perspective',
     position: 'inline',
@@ -78,7 +97,7 @@ const openOverlay = async (ctx: ContentScriptContext, atcl: Article) => {
       // Create the Svelte app inside the UI container
       const app = mount(App, {
         target: container,
-        props: {articleMsg: atcl}
+        props: {}
       });
       return app;
     },
@@ -116,20 +135,11 @@ export default defineContentScript({
         clog(`Sent Response`);
         return;
       } else if (msg?.cmd === "open_overlay") {
-        const url: string | undefined = msg.url;
-        clog(`Got URL: ${url}`);
-        if (url) {
-          const result = extractArticle(url);
-          clog(`Extraction Result:`, result);
-          if (result === null) {
-            sendResponse({ error: "error" });
-          } else {
-            openOverlay(ctx, result);
-          }
-        } else {
+        openOverlay(ctx).then(() => {
+          sendResponse({ ok: "ok" });
+        }).catch(() => {
           sendResponse({ error: "error" });
-        }
-        sendResponse({ ok: "ok" });
+        });
         return;
       }
       clog(`Invalid Command: ${msg?.cmd}`);

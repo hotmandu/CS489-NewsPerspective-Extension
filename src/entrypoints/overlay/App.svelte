@@ -6,11 +6,6 @@
 
   const clog = getConsolelog('Analyze');
 
-  interface Props {
-    articleMsg: Article
-  };
-  let { articleMsg }: Props = $props();
-
   let loadingState = $state<string | boolean>(true);
 
   const overlay = async () => {

@@ -152,6 +152,14 @@
       >Analyze</button
     >
     {/if}
+    <div class="relative flex flex-row py-2 items-center mx-2">
+      <div class="flex-grow border-t border-gray-400"></div>
+      <span class="flex-shrink mx-4 text-gray-400">OR</span>
+      <div class="flex-grow border-t border-gray-400"></div>
+    </div>
+    <div class="flex flex-col items-center mt-2 mb-1">
+      <p>You can open simple overlay in any website.</p>
+    </div>
     <button class="border rounded-2xl bg-teal-500 hover:bg-teal-600 p-2 m-2 w-36 mx-auto text-white text-lg font-medium tracking-wide" onclick={openOverlay}
       >Open Overlay</button
     >

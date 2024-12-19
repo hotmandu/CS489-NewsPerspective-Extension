@@ -1,6 +1,7 @@
 <script lang="ts">
   const detectibleLinks = [
-    {name: 'BBC', link: 'www.bbc.com'}
+    {name: 'BBC', link: 'www.bbc.com'},
+    {name: 'CNN', link: 'edition.cnn.com'}
   ];
 </script>
 
